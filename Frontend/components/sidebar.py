@@ -6,8 +6,9 @@ import customtkinter as ctk
 from tkinter import messagebox
 
 class Sidebar(ctk.CTkFrame):
-    def __init__(self, parent, cambiar_vista_callback):
+    def __init__(self, parent, cambiar_vista_callback, departamento_id):
         super().__init__(parent, width=200, corner_radius=0)
+        self.departamento_id = departamento_id
         self.pack_propagate(False)
         
         self.cambiar_vista_callback = cambiar_vista_callback
@@ -24,9 +25,24 @@ class Sidebar(ctk.CTkFrame):
         )
         self.logo_label.pack(pady=(20, 20))
         
-        # Botones de navegación
+        # Módulos permitidos por departamento
+        modulos_por_departamento = {
+            1: ["ventas", "recursos_humanos", "finanzas", "inventario", "produccion", "compras", "atencion_cliente"],
+            2: ["ventas"],
+            4: ["recursos_humanos"],
+            5: ["finanzas"],
+            6: ["inventario"],
+            7: ["produccion"],
+            8: ["compras"],
+            9: ["atencion_cliente"]
+        }
+
+        # Lista de módulos permitidos para este usuario
+        modulos_disponibles = modulos_por_departamento.get(self.departamento_id, [])
+
+        # Definir todos los botones posibles
         buttons_data = [
-            {"text": "Ventas", "vista": "ventas", "active": True},
+            {"text": "Ventas", "vista": "ventas"},
             {"text": "Recursos Humanos", "vista": "recursos_humanos"},
             {"text": "Finanzas", "vista": "finanzas"},
             {"text": "Inventario", "vista": "inventario"},
@@ -34,12 +50,18 @@ class Sidebar(ctk.CTkFrame):
             {"text": "Compras", "vista": "compras"},
             {"text": "Atención al Cliente", "vista": "atencion_cliente"},
         ]
+
+        self.nav_dict = {}
         
-        for i, data in enumerate(buttons_data):
+        # Crear solo los botones permitidos
+        for data in buttons_data:
+            if data["vista"] not in modulos_disponibles:
+                continue
+
             button = ctk.CTkButton(
                 self,
                 text=data["text"],
-                fg_color="transparent" if not data.get("active", False) else "gray70",
+                fg_color="transparent",
                 text_color=("gray10", "gray90"),
                 hover_color=("gray70", "gray30"),
                 anchor="w",
@@ -48,6 +70,7 @@ class Sidebar(ctk.CTkFrame):
             )
             button.pack(fill="x", padx=10, pady=5)
             self.nav_buttons.append(button)
+            self.nav_dict[data["vista"]] = button
         
         # Separador
         self.separator = ctk.CTkFrame(self, height=1, fg_color="gray70")
@@ -57,12 +80,6 @@ class Sidebar(ctk.CTkFrame):
         self.user_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.user_frame.pack(side="bottom", fill="x", padx=10, pady=10)
         
-        self.user_name = ctk.CTkLabel(
-            self.user_frame, 
-            text="Usuario: Admin",
-            anchor="w"
-        )
-        self.user_name.pack(fill="x", pady=2)
         
         self.logout_button = ctk.CTkButton(
             self.user_frame,
@@ -77,13 +94,11 @@ class Sidebar(ctk.CTkFrame):
         self.logout_button.pack(fill="x", pady=5)
     
     def actualizar_navegacion(self, vista_activa):
-        """Actualizar colores de los botones de navegación"""
-        vistas = ["ventas", "recursos_humanos", "finanzas", "inventario", "produccion", "compras", "atencion_cliente"]
-        for i, vista in enumerate(vistas):
+        for vista, button in self.nav_dict.items():
             if vista == vista_activa:
-                self.nav_buttons[i].configure(fg_color="gray70")
+                button.configure(fg_color="gray70")
             else:
-                self.nav_buttons[i].configure(fg_color="transparent")
+                button.configure(fg_color="transparent")
     
     def logout(self):
         """Cerrar sesión"""

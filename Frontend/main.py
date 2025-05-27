@@ -18,7 +18,7 @@ ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
 class KTechERP(ctk.CTk):
-    def __init__(self):
+    def __init__(self, departamento_id):
         super().__init__()
         
         # Configuración de la ventana principal
@@ -29,6 +29,7 @@ class KTechERP(ctk.CTk):
         # Variables globales
         self.vista_actual = "ventas"
         self.current_view = None
+        self.departamento_id = departamento_id
         
         # Crear estructura principal
         self.crear_interfaz()
@@ -38,7 +39,7 @@ class KTechERP(ctk.CTk):
     
     def crear_interfaz(self):
         # Crear sidebar
-        self.sidebar = Sidebar(self, self.cambiar_vista)
+        self.sidebar = Sidebar(self, self.cambiar_vista, self.departamento_id)
         self.sidebar.pack(side="left", fill="y", padx=0, pady=0)
         
         # Frame principal para el contenido
@@ -130,8 +131,3 @@ class KTechERP(ctk.CTk):
         """Mostrar módulo de compras"""
         self.current_view = AtencionClienteView(self.main_frame)
         self.sidebar.actualizar_navegacion("atencion_cliente")
-    
-
-if __name__ == "__main__":
-    app = KTechERP()
-    app.mainloop()

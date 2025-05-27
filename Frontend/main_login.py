@@ -11,10 +11,11 @@ if __name__ == "__main__":
     root.geometry("400x300")
     root.resizable(False, False)
 
-    def iniciar_erp():
-        root.destroy()
-        app = KTechERP()
+    def iniciar_erp(departamento_id):
+        root.withdraw()
+        app = KTechERP(departamento_id)
         app.mainloop()
+        root.destroy()
 
     login = LoginView(root, iniciar_erp)
     root.mainloop()

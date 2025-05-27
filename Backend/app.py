@@ -1109,15 +1109,25 @@ def iniciar_sesion():
 
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT u.usuario_id, u.correo, e.departamento_id FROM usuarios u JOIN empleados e ON u.empleado_id = e.empleado_id WHERE u.correo = %s AND u.contrasena = %s", (correo, contrasena))
+    cursor.execute("""
+        SELECT u.usuario_id, d.departamento_id
+        FROM usuarios u 
+        JOIN empleados e ON u.empleado_id = e.empleado_id 
+        JOIN departamentos d ON e.departamento_id = d.departamento_id 
+        WHERE u.correo = %s AND u.contrasena = %s
+    """, (correo, contrasena))
     resultado = cursor.fetchone()
     conn.close()
 
     if resultado:
-        return jsonify({"success": True, "usuario_id": resultado[0]}), 200
+        usuario_id, departamento_id = resultado
+        return jsonify({
+            "success": True,
+            "usuario_id": usuario_id,
+            "departamento_id": departamento_id
+        }), 200
     else:
         return jsonify({"success": False}), 401
-
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

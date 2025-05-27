@@ -34,10 +34,21 @@ class LoginView(ctk.CTkFrame):
             return
 
         try:
-            response = requests.post(f"{API_URL}/iniciar_sesion", json={"correo": correo, "contrasena": contrasena})
-            if response.status_code == 200 and response.json().get("success"):
-                self.callback_login_exitoso()
+            response = requests.post(f"{API_URL}/iniciar_sesion", json={
+                "correo": correo,
+                "contrasena": contrasena
+            })
+
+            if response.status_code == 200:
+                data = response.json()
+                print("Respuesta JSON:", response.json())
+                if data.get("success") and "departamento_id" in data:
+                    departamento_id = data["departamento_id"]
+                    self.callback_login_exitoso(departamento_id)
+                else:
+                    messagebox.showerror("Error", "Inicio de sesión inválido. Verifica tus credenciales.")
             else:
-                messagebox.showerror("Acceso denegado", "Correo o contraseña incorrectos.")
-        except Exception:
-            messagebox.showerror("Error", "No se pudo conectar con el servidor.")
+                messagebox.showerror("Error", f"Error de servidor: código {response.status_code}")
+        except Exception as e:
+            print("Error durante login:", e)
+            messagebox.showerror("Error", f"No se pudo conectar con el servidor:\n{e}")
