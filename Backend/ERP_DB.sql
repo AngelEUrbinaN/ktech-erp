@@ -57,7 +57,7 @@ CREATE TABLE `departamentos` (
   `presupuesto` decimal(14,2) NOT NULL,
   `descripcion` varchar(500) NOT NULL,
   PRIMARY KEY (`departamento_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `departamentos` (
 
 LOCK TABLES `departamentos` WRITE;
 /*!40000 ALTER TABLE `departamentos` DISABLE KEYS */;
-INSERT INTO `departamentos` VALUES (1,'I.T',123456.00,'IT Des'),(2,'Ventas',800000.00,'Departamento encargado de recibir a clientes y vender los productos.');
+INSERT INTO `departamentos` VALUES (1,'Dirección General',123456.00,'Departamento general. Acceso concedido a cualquier módulo.'),(2,'Ventas',800000.00,'Departamento encargado de recibir a clientes y vender los productos.'),(4,'Recursos Humanos',500000.00,'Departamento encargado de gestionar el talento humano.'),(5,'Finanzas',900000.00,'Departamento encargado de monitorer los ingresos y egresos económicos de la empresa.'),(6,'Inventario',400000.00,'Departamento encargado de gestionar los inzumos y productos necesarios en la empresa.'),(7,'Producción',700000.00,'Departamento encargado de la fabricación de los productos en la empresa.'),(8,'Compras',300000.00,'Departamento encargado de la adquisicón de materiales.'),(9,'Atención al Cliente',100000.00,'Departamento encargado de la comunicación con el cliente en caso de tener algún problema, duda o sugerencia.');
 /*!40000 ALTER TABLE `departamentos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `empleados` (
   PRIMARY KEY (`empleado_id`),
   KEY `departamento_id` (`departamento_id`),
   CONSTRAINT `empleados_ibfk_1` FOREIGN KEY (`departamento_id`) REFERENCES `departamentos` (`departamento_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (2,'Amiya','amiya@bunny.com','AMY1234','Lider',1,90000.00,'2025-05-24'),(4,'Prueba','prueba@prueba.com','prueba2345','Prueba',2,90.00,'2025-05-25'),(5,'a','a@a.com','a','a',2,1.00,'2025-05-26');
+INSERT INTO `empleados` VALUES (2,'Amiya','amiya@ri.com','AMY1234','Lider',1,90000.00,'2025-05-24'),(4,'Prueba','prueba@prueba.com','prueba2345','Prueba',2,90.00,'2025-05-25'),(5,'a','a@a.com','a','a',2,1.00,'2025-05-26'),(6,'admin','admin@ktech.com','admin12345','Administrador',1,90000.00,'2025-05-27'),(7,'Ángel Urbina','angel@ktech.com','AU909090','Gestor de inventario',6,30000.00,'2025-05-27');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,7 +356,7 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`usuario_id`),
   KEY `empleado_id` (`empleado_id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`empleado_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,7 +365,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'amiya@bunny.com','bunny girl',2),(2,'prueba@prueba.com','prueba',4),(3,'a@a.com','as',5);
+INSERT INTO `usuarios` VALUES (1,'amiya@bunny.com','bunny girl',2),(2,'prueba@prueba.com','prueba',4),(3,'a@a.com','as',5),(4,'angel@ktech.com','1234',7),(5,'admin@ktech.com','1234',6);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,4 +410,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-26 22:22:08
+-- Dump completed on 2025-05-27  9:04:28
